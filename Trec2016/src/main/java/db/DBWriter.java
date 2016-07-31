@@ -1,3 +1,8 @@
+package db;
+
+import util.Constants;
+import util.Segmenter;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,12 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import com.sun.xml.internal.bind.v2.runtime.reflect.opt.Const;
-
-/**
- * @since 2016年4月17日 下午2:30:27
- * @version 1.0
- */
 public class DBWriter {
 	
 	private static int INSERT_PER_BATCH = 400;
@@ -73,7 +72,7 @@ public class DBWriter {
 //	//计算query和doc的相关程度，详见论文第四节右边
 //	public static double getPqd(String query, File doc) {
 //		//首先统计doc中每个term出现的次数
-//		ArrayList<String> terms = Segmenter.segment(query);
+//		ArrayList<String> terms = util.Segmenter.segment(query);
 //		HashMap<String, Integer> dMap = new HashMap<String, Integer>();	//记录query中每个term出现的次数
 //		int length = 0;			//文档长度
 //		for (String term : terms) {
@@ -84,7 +83,7 @@ public class DBWriter {
 //			BufferedReader bf = new BufferedReader(new FileReader(doc));
 //			String s = null;
 //			while ((s = bf.readLine()) != null) {
-//				ArrayList<String> ss = Segmenter.segment(s);
+//				ArrayList<String> ss = util.Segmenter.segment(s);
 //				for (String word : ss) {
 //					if (dMap.containsKey(word)) {
 //						dMap.put(word, dMap.get(word) + 1);

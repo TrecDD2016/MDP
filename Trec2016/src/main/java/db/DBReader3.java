@@ -1,3 +1,7 @@
+package db;
+
+import util.Constants;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -5,10 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-/**
- * @since 2016年4月18日 下午8:29:15
- * @version 1.0
- */
 public class DBReader3 implements DBReadService{
 	
 	private HashMap<String, Double> tcMap = new HashMap<String, Double>();
@@ -18,7 +18,7 @@ public class DBReader3 implements DBReadService{
 	private HashSet<String> relatedDocs = new HashSet<String>();
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getIdf(java.lang.String)
+	 * @see db.DBReadService#getIdf(java.lang.String)
 	 */
 	public double getIdf(String t) {
 		if (idfMap.containsKey(t)) {
@@ -28,7 +28,7 @@ public class DBReader3 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPstd(java.lang.String, java.lang.String)
+	 * @see db.DBReadService#getPstd(java.lang.String, java.lang.String)
 	 */
 	public double getPstd(String t, String doc) {
 		int td = 0;
@@ -47,7 +47,7 @@ public class DBReader3 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPustd(java.lang.String, java.lang.String)
+	 * @see db.DBReadService#getPustd(java.lang.String, java.lang.String)
 	 */
 	public double getPustd(String t, String doc) {
 			
@@ -69,7 +69,7 @@ public class DBReader3 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getRelatedDocs(java.util.ArrayList)
+	 * @see db.DBReadService#getRelatedDocs(java.util.ArrayList)
 	 */
 	public ArrayList<String> getRelatedDocs(ArrayList<String> terms) {
 		return new ArrayList<String>(relatedDocs); 
@@ -79,17 +79,17 @@ public class DBReader3 implements DBReadService{
 //		ArrayList<String> a = new ArrayList<String>();
 //		a.add("clueweb09-en0000-23-00194");
 //		a.add("clueweb09-en0000-43-16967");
-//		ArrayList<String> res = new DBReader3().getRelatedDocs(a);
+//		ArrayList<String> res = new db.DBReader3().getRelatedDocs(a);
 //		for (String s : res) {
 //			System.out.println(s);
 //		}
-//		System.out.println(new DBReader3().getIdf("contact"));
-//		System.out.println(new DBReader3().getPstd("contact", "clueweb09-en0000-43-16967"));
-//		System.out.println(new DBReader3().getPustd("contact", "clueweb09-en0000-43-16967"));
+//		System.out.println(new db.DBReader3().getIdf("contact"));
+//		System.out.println(new db.DBReader3().getPstd("contact", "clueweb09-en0000-43-16967"));
+//		System.out.println(new db.DBReader3().getPustd("contact", "clueweb09-en0000-43-16967"));
 //	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPaths(java.util.ArrayList)
+	 * @see db.DBReadService#getPaths(java.util.ArrayList)
 	 */
 	public ArrayList<String> getPaths(ArrayList<String> docs) {
 		ArrayList<String> res = new ArrayList<String>();
@@ -118,7 +118,7 @@ public class DBReader3 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#initialize(java.lang.String)
+	 * @see db.DBReadService#initialize(java.lang.String)
 	 */
 	public void initialize(ArrayList<String> query) {
 		tcMap.clear();

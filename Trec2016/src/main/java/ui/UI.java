@@ -1,3 +1,8 @@
+package ui;
+
+import db.DBReader3;
+import search.SearchSession;
+
 import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,15 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * 
- */
-
-/**
- *
- * @since 2016年4月25日 下午5:24:43
- * @version 1.0
- */
 public class UI extends JPanel{
 	
 	SearchSession searchSession = new SearchSession();

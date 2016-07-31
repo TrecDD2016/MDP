@@ -1,5 +1,7 @@
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+package ui;
+
+import db.DBReader3;
+
 import java.awt.TextArea;
 import java.awt.event.MouseAdapter;
 import java.io.BufferedReader;

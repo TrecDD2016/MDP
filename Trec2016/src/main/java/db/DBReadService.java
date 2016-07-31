@@ -1,9 +1,7 @@
+package db;
+
 import java.util.ArrayList;
 
-/**
- * @since 2016年4月18日 下午7:49:32
- * @version 1.0
- */
 public interface DBReadService {
 	
 	public void initialize(ArrayList<String> query);

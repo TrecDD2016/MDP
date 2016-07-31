@@ -1,17 +1,14 @@
+package db;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-/**
- *
- * @since 2016年4月18日 下午8:29:15
- * @version 1.0
- */
-public class DBReader2 implements DBReadService{
+public class DBReader implements DBReadService{
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getIdf(java.lang.String)
+	 * @see db.DBReadService#getIdf(java.lang.String)
 	 */
 	public double getIdf(String t) {
 		PreparedStatement ps = DBUtility.getPreparedStatement("select idf from idf where term=?");
@@ -31,44 +28,20 @@ public class DBReader2 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPstd(java.lang.String, java.lang.String)
+	 * @see db.DBReadService#getPstd(java.lang.String, java.lang.String)
 	 */
 	public double getPstd(String t, String doc) {
-		PreparedStatement dlengthPs = DBUtility.getPreparedStatement("select length from dlength where doc=?");
-		PreparedStatement tdPs = DBUtility.getPreparedStatement("select td from td where term=? and doc=?");
-		PreparedStatement tcPs = DBUtility.getPreparedStatement("select tc from tc where term=?");
-		if (dlengthPs == null || tdPs == null || tcPs == null) {
+		PreparedStatement ps = DBUtility.getPreparedStatement("select pstd from pstd where term=? and doc=?");
+		if (ps == null) {
 			return 0;
 		}
 		try {
-			dlengthPs.setString(1, doc);
-			tdPs.setString(1, t);
-			tdPs.setString(2, doc);
-			tcPs.setString(1, t);
-			
-			int td = 0;
-			ResultSet tdRs  = tdPs.executeQuery();
-			if (tdRs.next()) {
-				td = tdRs.getInt(1);
+			ps.setString(1, t);
+			ps.setString(2, doc);
+			ResultSet rs  = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getDouble(1);
 			}
-			
-			double tc = 0;
-			ResultSet tcRs  = tcPs.executeQuery();
-			if (tcRs.next()) {
-				tc = tdRs.getDouble(1);
-			} 
-			
-			int dlength = 0;
-			ResultSet dlengthRs  =dlengthPs.executeQuery();
-			if (dlengthRs.next()) {
-				dlength = dlengthRs.getInt(1);
-			}
-			
-			tdRs.close();
-			tcRs.close();
-			dlengthRs.close();
-			
-			return (td + Constants.u * tc) / ((double)dlength + Constants.u);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -76,35 +49,20 @@ public class DBReader2 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPustd(java.lang.String, java.lang.String)
+	 * @see db.DBReadService#getPustd(java.lang.String, java.lang.String)
 	 */
 	public double getPustd(String t, String doc) {
-		PreparedStatement dlengthPs = DBUtility.getPreparedStatement("select length from dlength where doc=?");
-		PreparedStatement tdPs = DBUtility.getPreparedStatement("select td from td where term=? and doc=?");
-		if (dlengthPs == null || tdPs == null) {
+		PreparedStatement ps = DBUtility.getPreparedStatement("select pustd from pustd where term=? and doc=?");
+		if (ps == null) {
 			return 0;
 		}
 		try {
-			dlengthPs.setString(1, doc);
-			tdPs.setString(1, t);
-			tdPs.setString(2, doc);
-			
-			int td = 0;
-			ResultSet tdRs  = tdPs.executeQuery();
-			if (tdRs.next()) {
-				td = tdRs.getInt(1);
+			ps.setString(1, t);
+			ps.setString(2, doc);
+			ResultSet rs  = ps.executeQuery();
+			if (rs.next()) {
+				return rs.getDouble(1);
 			}
-			
-			int dlength = 0;
-			ResultSet dlengthRs  =dlengthPs.executeQuery();
-			if (dlengthRs.next()) {
-				dlength = dlengthRs.getInt(1);
-			}
-			
-			tdRs.close();
-			dlengthRs.close();
-			
-			return (td ) / ((double)dlength);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -112,7 +70,7 @@ public class DBReader2 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getRelatedDocs(java.util.ArrayList)
+	 * @see db.DBReadService#getRelatedDocs(java.util.ArrayList)
 	 */
 	public ArrayList<String> getRelatedDocs(ArrayList<String> terms) {
 		ArrayList<String> res = new ArrayList<String>();
@@ -144,17 +102,17 @@ public class DBReader2 implements DBReadService{
 		ArrayList<String> a = new ArrayList<String>();
 		a.add("clueweb09-en0000-23-00194");
 		a.add("clueweb09-en0000-43-16967");
-		ArrayList<String> res = new DBReader2().getRelatedDocs(a);
+		ArrayList<String> res = new DBReader().getRelatedDocs(a);
 		for (String s : res) {
 			System.out.println(s);
 		}
-		System.out.println(new DBReader2().getIdf("contact"));
-		System.out.println(new DBReader2().getPstd("contact", "clueweb09-en0000-43-16967"));
-		System.out.println(new DBReader2().getPustd("contact", "clueweb09-en0000-43-16967"));
+		System.out.println(new DBReader().getIdf("contact"));
+		System.out.println(new DBReader().getPstd("contact", "clueweb09-en0000-43-16967"));
+		System.out.println(new DBReader().getPustd("contact", "clueweb09-en0000-43-16967"));
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#getPaths(java.util.ArrayList)
+	 * @see db.DBReadService#getPaths(java.util.ArrayList)
 	 */
 	public ArrayList<String> getPaths(ArrayList<String> docs) {
 		ArrayList<String> res = new ArrayList<String>();
@@ -183,7 +141,7 @@ public class DBReader2 implements DBReadService{
 	}
 
 	/* (non-Javadoc)
-	 * @see DBReadService#initialize(java.lang.String)
+	 * @see db.DBReadService#initialize(java.lang.String)
 	 */
 	public void initialize(ArrayList<String> query) {
 		// TODO Auto-generated method stub

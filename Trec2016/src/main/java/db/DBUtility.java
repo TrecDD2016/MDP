@@ -1,14 +1,11 @@
+package db;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-/**  
- * 创建时间：2015年3月10日 下午1:41:09   
- * @version 1.0
- * 类说明：  
- */
 public class DBUtility {
 	
     static String driver = "com.mysql.jdbc.Driver";

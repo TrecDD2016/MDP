@@ -1,3 +1,5 @@
+package util;
+
 import java.io.StringReader;
 import java.util.ArrayList;
 
@@ -5,12 +7,6 @@ import org.apache.lucene.analysis.TokenStream;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
-/**
- *
- * @author 霄汉
- * @since 2016年4月13日 下午9:26:08
- * @version 1.0
- */
 public class Segmenter {
 	
 	public static ArrayList<String> segment(String s) {

@@ -1,11 +1,12 @@
-﻿import java.util.ArrayList;
+﻿package search;
+
+import db.DBReadService;
+import db.DBReader3;
+import util.Segmenter;
+
+import java.util.ArrayList;
 import java.util.Collections;
 
-/**
- *
- * @since 2016年4月18日 下午7:56:00
- * @version 1.0
- */
 public class SearchSession {
 	
 	private Document lastBestDoc = null;
@@ -28,7 +29,7 @@ public class SearchSession {
 	public ArrayList<String> getSearchResults(String query) {
 
 		ArrayList<Document> docValueList=new ArrayList<Document>();
-		ArrayList<String> terms=Segmenter.segment(query);
+		ArrayList<String> terms= Segmenter.segment(query);
 		dbService.initialize(terms);	//TODO 缓存
 		ArrayList<String> docList=dbService.getRelatedDocs(terms);
 		if(docList==null||docList.size()==0){ //无结果情况
@@ -77,10 +78,7 @@ public class SearchSession {
 		}
 		return result;
 	}
-	
-	/*
-	 *  
-	 */
+
 	private double calRelevanceBetweenQueryAndDoc(ArrayList<String> query,String doc,int index){
 		double result=1;
 		for(int i=0;i<query.size();i++){

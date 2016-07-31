@@ -1,7 +1,8 @@
+package ui;
+
+import search.SearchSession;
+
 import java.awt.BorderLayout;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;

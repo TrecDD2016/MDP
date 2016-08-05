@@ -118,12 +118,17 @@ public class DBWriter {
 				while ((s = bf.readLine()) != null) {
 					ArrayList<String> ss = Segmenter.segment(s);
 					for (String word : ss) {
-						if (cMap.containsKey(word)) {
-							cMap.put(word, cMap.get(word) + 1);
-						}else {
-							cMap.put(word, 1);
-						}
-						++cLength;
+//                        把所有的non-printable字符删除了，否则数据库会把包含非可见字符的键当成相同主键而拒绝写入
+//                        therefore, 需要检查删除后的字符串是否为空
+                        word = word.replaceAll("\\p{C}", "");
+                        if (word.length() > 0) {
+                            if (cMap.containsKey(word)) {
+                                cMap.put(word, cMap.get(word) + 1);
+                            } else {
+                                cMap.put(word, 1);
+                            }
+                            ++cLength;
+                        }
 					}
 				}
 				bf.close();
@@ -150,12 +155,18 @@ public class DBWriter {
 				while ((s = bf.readLine()) != null) {
 					ArrayList<String> ss = Segmenter.segment(s);
 					for (String word : ss) {
-						if (wordCountMap.containsKey(word)) {
-							wordCountMap.put(word, wordCountMap.get(word) + 1);
-						}else {
-							wordCountMap.put(word, 1);
-						}
-						++docLength;
+
+//                        把所有的non-printable字符删除了，否则数据库会把包含非可见字符的键当成相同主键而拒绝写入
+//                        therefore, 需要检查删除后的字符串是否为空
+                        word = word.replaceAll("\\p{C}", "");
+                        if (word.length() > 0) {
+                            if (wordCountMap.containsKey(word)) {
+                                wordCountMap.put(word, wordCountMap.get(word) + 1);
+                            } else {
+                                wordCountMap.put(word, 1);
+                            }
+                            ++docLength;
+                        }
 					}
 				}
 				bf.close();

@@ -7,7 +7,35 @@
     <groupId>cn.nju.trec</groupId>
     <artifactId>Trec2016</artifactId>
     <version>1.0-SNAPSHOT</version>
-<dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <dependencies>
+
+
+    <!-- https://mvnrepository.com/artifact/edu.stanford.nlp/stanford-corenlp -->
+    <dependency>
+        <groupId>edu.stanford.nlp</groupId>
+        <artifactId>stanford-corenlp</artifactId>
+        <version>3.6.0</version>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+    <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.5</version>
+    </dependency>
+
     <!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-core -->
     <dependency>
         <groupId>org.apache.lucene</groupId>

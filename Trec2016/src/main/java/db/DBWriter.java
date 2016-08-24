@@ -15,9 +15,9 @@ public class DBWriter {
 	
 	private static int INSERT_PER_BATCH = 400;
 	
-	private static final String C_PATH = "E:/人工智能数据/url-header-html-txt";	//语料库路径
+	private static final String C_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//语料库路径
 	
-	private static final String D_PATH = "E:/人工智能数据/url-header-html-txt";	//文档库路径
+	private static final String D_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//文档库路径
 	
 	private static final String CORPUS_FILE_EXT = ".txt";	//语料库文件后缀名
 	
@@ -285,7 +285,34 @@ public class DBWriter {
 		}
 	}
 
-	private static void writePustd(String doc, HashMap<String, Double> m) {
+	public static void updatePustdByTerm(String t, HashMap<String, Double> m) {
+		StringBuffer sb = new StringBuffer();
+		int numInBatch = 1;		//当前行是在本批中的第几个
+
+		for (Entry<String, Double> e : m.entrySet()) {
+			String doc = e.getKey().replaceAll("'", "''");
+			if (numInBatch == 1) {
+				sb.append("insert into pustd(term, doc, pustd) values('");
+				sb.append(t).append("','").append(doc).append("',").append(e.getValue()).append(")");
+				numInBatch++;
+			}else if (numInBatch > INSERT_PER_BATCH) {
+				DBUtility.executeInsert(sb.toString());
+				sb.setLength(0);
+				numInBatch = 1;
+			}else {
+				sb.append(",('").append(t).append("','").append(doc).append("',").append(e.getValue()).append(")");
+				numInBatch++;
+			}
+		}
+
+		sb.append(" ON DUPLICATE KEY UPDATE pustd=VALUES(pustd)");
+
+		if (sb.length() != 0) {
+			DBUtility.executeInsert(sb.toString());
+		}
+	}
+
+	public static void writePustd(String doc, HashMap<String, Double> m) {
 		StringBuffer sb = new StringBuffer();
 		int numInBatch = 1;		//当前行是在本批中的第几个
 		

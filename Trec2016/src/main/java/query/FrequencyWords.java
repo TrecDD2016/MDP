@@ -19,8 +19,6 @@ public class FrequencyWords {
 
 
     public static void mostFrequentWords(String sentence, final Map<String,Integer> countMap) throws ParserConfigurationException, SAXException, IOException {
-//        Pattern pattern = Pattern.compile("(?<=>)*(?=</)");
-
         String str = "<doc>"+sentence+"</doc>";
         InputStream in = IOUtils.toInputStream(str,"UTF-8");
 

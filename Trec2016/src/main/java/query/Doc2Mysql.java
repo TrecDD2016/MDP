@@ -8,21 +8,18 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Doc2Mysql {
-    private InputStream is;
+    private static int INSERT_PER_BATCH = 100;
 
-    private static int INSERT_PER_BATCH = 400;
+    private static Map<String,String> docMap = new HashMap();
 
-    private Map<String,String> docMap = new HashMap();
+    private static String FILE_SUFFIX = "txt";
 
-    private DefaultHandler handler = new DefaultHandler(){
+    private static DefaultHandler handler = new DefaultHandler(){
 
         STATUS status = STATUS.other;
 
@@ -88,7 +85,7 @@ public class Doc2Mysql {
 
     private static SAXParser parser;
 
-    public static void main(String[] args){
+    static {
         try {
             parser = factory.newSAXParser();
         } catch (ParserConfigurationException e) {
@@ -98,26 +95,42 @@ public class Doc2Mysql {
         }
     }
 
-    private void importFile(String path){
+    public static void startImport(String docDir){
+        File cRoot = new File(docDir);
+        File[] files = cRoot.listFiles();
+        for (File f: files){
+            mapFile(f);
 
-        try {
-            is = new FileInputStream(path);
+            // execute batch each INSERT_PER_BATCH docs
+            if (docMap.size() > INSERT_PER_BATCH) {
+                writeDocs(docMap);
+                docMap.clear();
+            }
+        }
+    }
 
-            parser.parse(is, handler);
+    private static void mapFile(File f){
+        if (f.isDirectory()){
+            File[] files = f.listFiles();
+            for (File file : files) {
+                mapFile(file);
+            }
+        }else if (f.getName().endsWith(FILE_SUFFIX)){
+            try {
+                InputStream is = new FileInputStream(f);
 
-            writeDocs(docMap);
+                parser.parse(is, handler);
 
-            docMap.clear();
-
-            is.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+                is.close();
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

@@ -1,6 +1,7 @@
 package query;
 
 import db.DBUtility;
+import org.ccil.cowan.tagsoup.jaxp.SAXParserImpl;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -9,6 +10,8 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,9 @@ public class Doc2Mysql {
 
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            status = STATUS.other;
+            if (qName.equals("DOCNO") || qName.equals("DOCCONTENT")) {
+                status = STATUS.other;
+            }
         }
 
         @Override
@@ -45,9 +50,10 @@ public class Doc2Mysql {
             switch (status){
                 case number:
                     keyStore=new String(ch, start, length).trim();
+                    docMap.put(keyStore,"");
                     break;
                 case document:
-                    docMap.put(keyStore, new String(ch, start, length));
+                    docMap.put(keyStore, docMap.get(keyStore).concat(new String(ch, start, length)));
                     break;
                 default:
                     break;
@@ -61,17 +67,18 @@ public class Doc2Mysql {
         int numInBatch = 1;		//当前行是在本批中的第几个
 
         for (Map.Entry<String, String> e : m.entrySet()) {
-            String word = e.getKey().replaceAll("'", "''");
+            String word = e.getKey().replaceAll("\'", "''");
+            String content = e.getValue().replaceAll("\'"," ");
             if (numInBatch == 1) {
                 sb.append("insert into docs(id, content) values('");
-                sb.append(word).append("',").append(e.getValue()).append(")");
+                sb.append(word).append("','").append(content).append("')");
                 numInBatch++;
             }else if (numInBatch > INSERT_PER_BATCH) {
                 DBUtility.executeInsert(sb.toString());
                 sb.setLength(0);
                 numInBatch = 1;
             }else {
-                sb.append(",('").append(word).append("',").append(e.getValue()).append(")");
+                sb.append(",('").append(word).append("','").append(content).append("')");
                 numInBatch++;
             }
         }
@@ -85,9 +92,13 @@ public class Doc2Mysql {
 
     private static SAXParser parser;
 
+
+    private static SAXParserImpl saxParserImpl;
+
     static {
         try {
             parser = factory.newSAXParser();
+            saxParserImpl = SAXParserImpl.newInstance(null);
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
         } catch (SAXException e) {
@@ -107,6 +118,8 @@ public class Doc2Mysql {
                 docMap.clear();
             }
         }
+
+        writeDocs(docMap);
     }
 
     private static void mapFile(File f){
@@ -119,7 +132,7 @@ public class Doc2Mysql {
             try {
                 InputStream is = new FileInputStream(f);
 
-                parser.parse(is, handler);
+                saxParserImpl.parse(is,handler);
 
                 is.close();
             } catch (FileNotFoundException e) {

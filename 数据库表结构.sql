@@ -88,6 +88,16 @@ CREATE TABLE `td` (
   PRIMARY KEY (`term`,`doc`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- ----------------------------
+-- Table structure for docs
+-- ----------------------------
+DROP TABLE IF EXISTS `docs`;
+CREATE TABLE `docs` (
+  `id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `content` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 
 # must chage to utf-8_bin, or mysql will consider 'médicament' as 'medicament'
@@ -98,3 +108,4 @@ ALTER TABLE pstd CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
 ALTER TABLE pustd CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
 ALTER TABLE tc CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
 ALTER TABLE td CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
+ALTER TABLE docs CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;

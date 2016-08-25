@@ -1,7 +1,10 @@
+import db.DBWriter;
 import query.Doc2Mysql;
+import query.ExtractQuery;
+import search.PustdUpdater;
 import search.SearchSession;
 
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * Created by cat on 16/8/21.
@@ -29,41 +32,41 @@ public class Main {
         Doc2Mysql.startImport(DOC_DIR);
 
 //        initialize values(very costly)
-//        DBWriter.initializeDatabase();
+        DBWriter.initializeDatabase();
 
         int iterIndex = 0;
 
 
 //        //TODO update the docList and queryList in searchSession
-//
-//        searchSession.firstQueryUpdate(query,bestDoc);
-//
-//        iterIndex++;
-//
-//        boolean ifStop = false;
-//
-//        while(ifStop) {
-//
-//            if (!(iterIndex == 1)) {
-//
-////            words of pre result D
-//                Set<String> Dpre = new TreeSet<String>();
-////            words of previous query
-//                Set<String> qPre = new TreeSet<String>();
-////            words of current query
-//                Set<String> qNow = new TreeSet<String>();
-//
-//                PustdUpdater.update(Dpre, qPre, qNow, searchSession);
-//
-//                String newQuery = ExtractQuery.extract(FEEDBACK_PATH);
-//
-//                searchSession.getSearchResults(newQuery);
-//            }
-//
-//            //TODO update ifStop, if need continue, update the feedback content and press 'Y'
-//            String next = scanner.nextLine();
-//            ifStop = next.equals("Y");
-//        }
+
+        searchSession.firstQueryUpdate(query,bestDoc);
+
+        iterIndex++;
+
+        boolean ifStop = false;
+
+        while(ifStop) {
+
+            if (!(iterIndex == 1)) {
+
+//            words of pre result D
+                Set<String> Dpre = new TreeSet<String>();
+//            words of previous query
+                Set<String> qPre = new TreeSet<String>();
+//            words of current query
+                Set<String> qNow = new TreeSet<String>();
+
+                PustdUpdater.update(Dpre, qPre, qNow, searchSession);
+
+                String newQuery = ExtractQuery.extract(FEEDBACK_PATH);
+
+                searchSession.getSearchResults(newQuery);
+            }
+
+            //TODO update ifStop, if need continue, update the feedback content and press 'Y'
+            String next = scanner.nextLine();
+            ifStop = next.equals("Y");
+        }
 
     }
 }

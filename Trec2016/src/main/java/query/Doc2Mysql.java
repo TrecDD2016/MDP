@@ -105,6 +105,9 @@ public class Doc2Mysql {
     }
 
     public static void startImport(String docDir){
+
+        DBUtility.executeTruncateDocs();
+
         File cRoot = new File(docDir);
         File[] files = cRoot.listFiles();
         for (File f: files){
@@ -124,6 +127,7 @@ public class Doc2Mysql {
         }
 
     }
+
 
     private static void mapFile(File f){
         if (f.isDirectory()){

@@ -35,7 +35,7 @@ public class DBWriter {
 	
 	public static void initializeDatabase(){
 		
-//		DBUtility.executeTruncate();
+		DBUtility.executeTruncate();
 		
 		//扫描语料库
 		File cRoot = new File(C_PATH);
@@ -47,20 +47,32 @@ public class DBWriter {
 		scanDocs(dRoot);
 		System.out.println("Docs Initialized!");
 		
-		writePath(pathMap);
-		System.out.println("Paths Initialized!");
+//		writePath(pathMap);
+//		System.out.println("Paths Initialized!");
 		
-		HashMap<String, Double> idfMap = new HashMap<String, Double>();
-		for (Entry<String, Integer> e : numDocsContainsTerm.entrySet()) {
-			double idf = Math.log(((double)docsCount) / e.getValue());	//TODO 这个log以多少为底？
-			idfMap.put(e.getKey(), idf);
-		}
+//		HashMap<String, Double> idfMap = new HashMap<String, Double>();
+//		for (Entry<String, Integer> e : numDocsContainsTerm.entrySet()) {
+//			double idf = Math.log(((double)docsCount) / e.getValue());	//TODO 这个log以多少为底？
+//			idfMap.put(e.getKey(), idf);
+//		}
+//
+//		System.out.println(numDocsContainsTerm.size());
+//
+//		writeIdf(idfMap);
+//		System.out.println("Idfs Initialized!");
 		
-		System.out.println(numDocsContainsTerm.size());
-		
-		writeIdf(idfMap);
-		System.out.println("Idfs Initialized!");
-		
+	}
+
+
+	public static void backup(){
+		DBUtility.executeConsoleCommand("mysqldump -uroot mdp pustd  > pustd_bak.sql");
+		DBUtility.executeConsoleCommand("mysqldump -uroot mdp pstd  > pstd_bak.sql");
+	}
+
+
+	public static void restore(){
+		DBUtility.executeConsoleCommand("mysql -uroot  mdp < pustd_bak.sql");
+		DBUtility.executeConsoleCommand("mysql -uroot  mdp < pstd_bak.sql");
 	}
 	
 //	public static void main(String[]args) {

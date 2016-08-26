@@ -30,22 +30,19 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         SearchSession searchSession = new SearchSession();
 
-
 //        costly
-        DBUtility.executeTruncate();
-        DBWriter.initializeDatabase();
-//        DBUtility.executeTruncate2();
+//        DBWriter.initializeDatabase();
+        DBWriter.restore();
+
 //        DBWriter2.initializeDatabase();
 
         //        import doc to mysql
-//        DBUtility.executeTruncateDocs();
 //        Doc2Mysql.startImport(DOC_DIR);
+
 
 
         int iterIndex = 0;
 
-
-//        //TODO update the docList and queryList in searchSession
 
         boolean ifStop = true;
 

@@ -35,7 +35,7 @@ public class DBWriter2 {
 	
 	public static void initializeDatabase(){
 		
-//		DBUtility.executeTruncate();
+		DBUtility.executeTruncate2();
 		DBUtility.executeSetting();
 		
 		//扫描语料库
@@ -48,8 +48,8 @@ public class DBWriter2 {
 		scanDocs(dRoot);
 		System.out.println("Docs Initialized!");
 		
-//		writePath(pathMap);
-//		System.out.println("Paths Initialized!");
+		writePath(pathMap);
+		System.out.println("Paths Initialized!");
 		
 		HashMap<String, Double> idfMap = new HashMap<String, Double>();
 		for (Entry<String, Integer> e : numDocsContainsTerm.entrySet()) {
@@ -59,8 +59,8 @@ public class DBWriter2 {
 		
 		System.out.println(numDocsContainsTerm.size());
 		
-//		writeIdf(idfMap);
-//		System.out.println("Idfs Initialized!");
+		writeIdf(idfMap);
+		System.out.println("Idfs Initialized!");
 		
 		HashMap<String, Double> tcMap = new HashMap<String, Double>();
 		for (Entry<String, Integer> e : cMap.entrySet()) {

@@ -4,3 +4,5 @@ auditlog/
 .idea/
 .DS_Store
 tmp.*
+pstd_bak.sql
+pustd_bak.sql

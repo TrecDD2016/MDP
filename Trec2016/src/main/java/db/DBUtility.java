@@ -1,5 +1,6 @@
 package db;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,9 +13,9 @@ public class DBUtility {
   
     static String url = "jdbc:mysql://127.0.0.1:3306/mdp?characterEncoding=utf-8";
 
-    static String user = "root1"; 
+    static String user = "root";
 
-    static String password = "root";
+    static String password = "";
     
     static Connection conn;
     
@@ -44,6 +45,14 @@ public class DBUtility {
 			e.printStackTrace();
 		}
     }
+
+    public static void executeConsoleCommand(String command){
+		try {
+			Runtime.getRuntime().exec(new String[]{"/bin/sh","-c",command});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
     
     public static void executeSetting() {
     	try {
@@ -62,17 +71,37 @@ public class DBUtility {
     		e.printStackTrace();
     	}
     }
+
+	public static void executeTruncate2() {
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("truncate table dlength");
+			stmt.executeUpdate("truncate table tc");
+			stmt.executeUpdate("truncate table td");
+			stmt.executeUpdate("truncate table path");
+			stmt.executeUpdate("truncate table idf");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void executeTruncateDocs() {
+		try {
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("truncate table docs");
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
     
     public static void executeTruncate() {
     	try {
     		Statement stmt = conn.createStatement();
-    		stmt.executeUpdate("truncate table idf");
-    		stmt.executeUpdate("truncate table path");
     		stmt.executeUpdate("truncate table pstd");
     		stmt.executeUpdate("truncate table pustd");
-    		stmt.executeUpdate("truncate table dlength");
-    		stmt.executeUpdate("truncate table tc");
-    		stmt.executeUpdate("truncate table td");
 			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

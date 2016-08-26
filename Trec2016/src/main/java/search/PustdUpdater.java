@@ -13,7 +13,6 @@ import java.util.*;
 public class PustdUpdater {
 
     private static DBReader dbReader = new DBReader();
-    private static DBWriter dbWriter= new DBWriter();
 
     public static void update(Set<String> DPre,Set<String> qPre, Set<String> qNow, SearchSession searchSession){
 
@@ -49,7 +48,6 @@ public class PustdUpdater {
                 for (String d: docs) {
                     double pustdOld = dbReader.getPustd(t, d);
 
-                    //TODO 这里的lastBestDoc需要确认怎么得到
                     double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
 
                     double pustdNew = Math.exp(1-pustdLastBest)*pustdOld;
@@ -74,7 +72,6 @@ public class PustdUpdater {
                 for (String d: docs) {
                     double pustdOld = dbReader.getPustd(t, d);
 
-                    //TODO 这里的lastBestDoc需要确认怎么得到
                     double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
 
                     double pustdNew = Math.exp(1+(1-pustdLastBest))*pustdOld;

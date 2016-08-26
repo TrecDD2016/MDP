@@ -1,7 +1,6 @@
 package ui;
 
 import search.SearchSession;
-import ui.MainUI;
 
 import javax.swing.*;
 import java.awt.*;

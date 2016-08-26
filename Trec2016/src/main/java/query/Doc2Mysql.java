@@ -10,8 +10,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -62,7 +60,7 @@ public class Doc2Mysql {
     };
 
 
-    private static void writeDocs(Map<String, String> m) {
+    private static void writeDocs(String docName,Map<String, String> m) {
         StringBuffer sb = new StringBuffer();
         int numInBatch = 1;		//当前行是在本批中的第几个
 
@@ -70,15 +68,15 @@ public class Doc2Mysql {
             String word = e.getKey().replaceAll("\'", "''");
             String content = e.getValue().replaceAll("\'"," ");
             if (numInBatch == 1) {
-                sb.append("insert into docs(id, content) values('");
-                sb.append(word).append("','").append(content).append("')");
+                sb.append("insert into docs(doc, id) values('");
+                sb.append(docName).append("','").append(word).append("')");
                 numInBatch++;
             }else if (numInBatch > INSERT_PER_BATCH) {
                 DBUtility.executeInsert(sb.toString());
                 sb.setLength(0);
                 numInBatch = 1;
             }else {
-                sb.append(",('").append(word).append("','").append(content).append("')");
+                sb.append(",('").append(docName).append("','").append(word).append("')");
                 numInBatch++;
             }
         }
@@ -110,16 +108,21 @@ public class Doc2Mysql {
         File cRoot = new File(docDir);
         File[] files = cRoot.listFiles();
         for (File f: files){
-            mapFile(f);
 
-            // execute batch each INSERT_PER_BATCH docs
-            if (docMap.size() > INSERT_PER_BATCH) {
-                writeDocs(docMap);
+            String fileName = f.getName().substring(0, f.getName().lastIndexOf('.'));
+
+            if (!fileName.trim().equals("")) {
+
+                mapFile(f);
+
+                // execute batch each INSERT_PER_BATCH docs
+//            if (docMap.size() > INSERT_PER_BATCH) {
+                writeDocs(fileName.trim(), docMap);
                 docMap.clear();
+//            }
             }
         }
 
-        writeDocs(docMap);
     }
 
     private static void mapFile(File f){

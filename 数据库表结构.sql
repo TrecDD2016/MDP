@@ -93,8 +93,9 @@ CREATE TABLE `td` (
 -- ----------------------------
 DROP TABLE IF EXISTS `docs`;
 CREATE TABLE `docs` (
+  `doc` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `id` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `content` TEXT COLLATE utf8_unicode_ci NOT NULL,
+  -- `content` TEXT COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 

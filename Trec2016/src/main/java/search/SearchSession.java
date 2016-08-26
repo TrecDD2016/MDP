@@ -1,4 +1,4 @@
-﻿package search;
+package search;
 
 import db.DBReadService;
 import db.DBReader3;
@@ -7,8 +7,10 @@ import util.Segmenter;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Created by cat on 16/8/24.
+ */
 public class SearchSession {
-
     private Document lastBestDoc = null;
     private ArrayList<String> lastQuery = null;
     private ArrayList<Document> docList = new ArrayList<Document>(); //每次查询返回的第一个文档
@@ -20,21 +22,22 @@ public class SearchSession {
     private double delta=0.42;
     private double garma=0.8;//折扣因子
 
+    private int DOC_VALUE_LIST_LIMIT = 2;
+
     private DBReadService dbService = new DBReader3();
 
 
-//TODO update the doc list in the first query done by indiri
-    public void firstQueryUpdate(String query, String doc){
-        ArrayList<String> terms= Segmenter.segment(query);
-        this.queryList.add(terms);
-        this.invalidList.add(new Boolean(Boolean.TRUE));
-
-        dbService.initialize(terms);	//TODO 缓存
-        ArrayList<String> docList=dbService.getRelatedDocs(terms);
-
-        double rel=this.calRelevanceRetweenSessionAndDoc(doc);
-        this.docList.add(new Document(doc, rel));
-    }
+    //TODO update the doc list in the first query done by indri
+//    public void firstQueryUpdate(String query, String doc){
+//        ArrayList<String> terms= Segmenter.segment(query);
+//        this.queryList.add(terms);
+//        this.invalidList.add(new Boolean(Boolean.TRUE));
+//
+//        dbService.initialize(terms);	//TODO 缓存
+//
+//        double rel=this.calRelevanceRetweenSessionAndDoc(doc);
+//        this.docList.add(new Document(doc, rel));
+//    }
 
 
 
@@ -59,7 +62,7 @@ public class SearchSession {
 
         for(int i=0;i<docList.size();i++){
             double rel=this.calRelevanceRetweenSessionAndDoc(docList.get(i));
-            if(docValueList.size()<10){
+            if(docValueList.size()<DOC_VALUE_LIST_LIMIT){
                 docValueList.add(new Document(docList.get(i),rel));
                 Collections.sort(docValueList);
             }else{

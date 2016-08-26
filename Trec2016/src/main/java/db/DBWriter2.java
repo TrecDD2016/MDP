@@ -13,9 +13,9 @@ public class DBWriter2 {
 	
 	private static int INSERT_PER_BATCH = 8000;
 	
-	private static final String C_PATH = "F:\\pomdp\\url-header-html-txt";	//语料库路径
+	private static final String C_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//语料库路径
 	
-	private static final String D_PATH = "F:\\pomdp\\url-header-html-txt";	//文档库路径
+	private static final String D_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//文档库路径
 	
 	private static final String CORPUS_FILE_EXT = ".txt";	//语料库文件后缀名
 	
@@ -35,7 +35,7 @@ public class DBWriter2 {
 	
 	public static void initializeDatabase(){
 		
-		DBUtility.executeTruncate();
+//		DBUtility.executeTruncate();
 		DBUtility.executeSetting();
 		
 		//扫描语料库
@@ -48,8 +48,8 @@ public class DBWriter2 {
 		scanDocs(dRoot);
 		System.out.println("Docs Initialized!");
 		
-		writePath(pathMap);
-		System.out.println("Paths Initialized!");
+//		writePath(pathMap);
+//		System.out.println("Paths Initialized!");
 		
 		HashMap<String, Double> idfMap = new HashMap<String, Double>();
 		for (Entry<String, Integer> e : numDocsContainsTerm.entrySet()) {
@@ -59,8 +59,8 @@ public class DBWriter2 {
 		
 		System.out.println(numDocsContainsTerm.size());
 		
-		writeIdf(idfMap);
-		System.out.println("Idfs Initialized!");
+//		writeIdf(idfMap);
+//		System.out.println("Idfs Initialized!");
 		
 		HashMap<String, Double> tcMap = new HashMap<String, Double>();
 		for (Entry<String, Integer> e : cMap.entrySet()) {

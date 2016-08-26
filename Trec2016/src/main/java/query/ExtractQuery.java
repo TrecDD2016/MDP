@@ -31,8 +31,6 @@ public class ExtractQuery {
 
         AbstractSequenceClassifier<CoreLabel> classifier = CRFClassifier.getClassifier(serializedClassifier);
 
-        System.out.println("==========");
-
         File file = new File(feedbackPath);
         String sentence = FileUtils.readFileToString(file, "utf-8");
         String sentence_with_label = classifier.classifyWithInlineXML(sentence);

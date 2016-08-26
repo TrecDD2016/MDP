@@ -35,7 +35,7 @@ public class DBWriter {
 	
 	public static void initializeDatabase(){
 		
-		DBUtility.executeTruncate();
+//		DBUtility.executeTruncate();
 		
 		//扫描语料库
 		File cRoot = new File(C_PATH);

@@ -117,6 +117,25 @@ public class DBReader3 implements DBReadService{
 		return res;
 	}
 
+
+	/* (non-Javadoc)
+	 * @see db.DBReadService#getPaths(java.util.ArrayList)
+	 */
+	public ArrayList<String> getDocNos(String doc) {
+		ArrayList<String> res = new ArrayList<String>();
+		StringBuffer sql = new StringBuffer("select id from docs where doc='"+doc+"'");
+		PreparedStatement ps = DBUtility.getPreparedStatement(sql.toString());
+		try {
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()) {
+				res.add(rs.getString(1));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
 	/* (non-Javadoc)
 	 * @see db.DBReadService#initialize(java.lang.String)
 	 */

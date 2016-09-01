@@ -15,7 +15,7 @@ public class DBUtility {
 
     static String user = "root";
 
-    static String password = "";
+    static String password = "123456";
     
     static Connection conn;
     
@@ -37,11 +37,12 @@ public class DBUtility {
     }
 
     public static void executeInsert(String sql) {
-    	try {
+		try {
     		Statement stmt = conn.createStatement();
     		stmt.executeUpdate(sql);
 			stmt.close();
 		} catch (SQLException e) {
+			System.out.println(sql);
 			e.printStackTrace();
 		}
     }
@@ -57,15 +58,15 @@ public class DBUtility {
     public static void executeSetting() {
     	try {
     		Statement stmt = conn.createStatement();
-    		stmt.executeUpdate("set collation_connection='utf8_unicode_ci'");
-    		stmt.executeUpdate("set collation_database='utf8_unicode_ci'");
-    		stmt.executeUpdate("set collation_server='utf8_unicode_ci'");
+    		stmt.executeUpdate("set collation_connection='utf8mb4_general_ci'");
+    		stmt.executeUpdate("set collation_database='utf8mb4_general_ci'");
+    		stmt.executeUpdate("set collation_server='utf8mb4_general_ci'");
     		
-    		stmt.executeUpdate("set character_set_client='utf8'");
-    		stmt.executeUpdate("set character_set_connection='utf8'");
-    		stmt.executeUpdate("set character_set_database='utf8'");
-    		stmt.executeUpdate("set character_set_results='utf8'");
-    		stmt.executeUpdate("set character_set_server='utf8'");
+    		stmt.executeUpdate("set character_set_client='utf8mb4'");
+    		stmt.executeUpdate("set character_set_connection='utf8mb4'");
+    		stmt.executeUpdate("set character_set_database='utf8mb4'");
+    		stmt.executeUpdate("set character_set_results='utf8mb4'");
+    		stmt.executeUpdate("set character_set_server='utf8mb4'");
 			stmt.close();
     	}catch(SQLException e ) {
     		e.printStackTrace();

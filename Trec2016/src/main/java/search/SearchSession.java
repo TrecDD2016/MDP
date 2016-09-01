@@ -22,7 +22,7 @@ public class SearchSession {
     private double delta=0.42;
     private double garma=0.8;//折扣因子
 
-    private int DOC_VALUE_LIST_LIMIT = 2;
+    private int DOC_VALUE_LIST_LIMIT = 10;
 
     private DBReadService dbService = new DBReader3();
 

@@ -2,42 +2,49 @@ import db.DBReader3;
 import db.DBUtility;
 import db.DBWriter;
 import db.DBWriter2;
+import org.bson.Document;
 import query.Doc2Mysql;
 import query.ExtractQuery;
 import search.PustdUpdater;
 import search.SearchSession;
 
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
+
 
 /**
  * Created by cat on 16/8/21.
  */
 public class Main {
 
-    private static String DOC_DIR = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";
-
-    private static String FEEDBACK_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/feedback";
-
-
     private static DBReader3 dbReader3 = new DBReader3();
 
-    public static void main(String args[]) throws Exception {
+    private static int ITER_NUM = 6;
 
+    private static String FEEDBACK_PATH = "/backup/dd_trec/jig/trec-dd-jig-master/DirectIndriMethod/DD16-1result.txt";
+
+    private static final String[] D_PATHS = {"/backup/dd_trec/data/EbolaDataXML",
+            "/backup/dd_trec/data/PolarDataXML"
+
+    };
+
+
+
+
+    public static void main(String args[]) throws Exception {
 
         Scanner scanner = new Scanner(System.in);
         SearchSession searchSession = new SearchSession();
 
-//        costly
-//        DBWriter.initializeDatabase();
-        DBWriter.restore();
-
-//        DBWriter2.initializeDatabase();
 
         //        import doc to mysql
-//        Doc2Mysql.startImport(DOC_DIR);
+//        Doc2Mysql.startImport(D_PATHS);
+
+//        DBWriter2.initializeDatabase(D_PATHS,D_PATHS);
+
+        //        costly
+//        DBWriter.initializeDatabase();
+//        DBWriter.backup();
+
 
 
 
@@ -76,24 +83,20 @@ public class Main {
                 System.out.println("result docs are:");
                 for (String result : results) {
                     System.out.println("Doc Name: "+result);
-
-                    System.out.println("Doc IDs:");
-                    System.out.println("    ******");
-                    ArrayList<String> docNos = dbReader3.getDocNos(result);
-                    for (String id: docNos){
-                        System.out.println("    "+id);
-                    }
-                    System.out.println("\n    ******");
                 }
                 System.out.println("\n==============");
             }
 
             iterIndex++;
 
-            //TODO update ifStop, if need continue, update the feedback content and press 'Y'
+
             System.out.print("Iter "+iterIndex+", If continue:");
-            String next = scanner.nextLine();
-            ifStop = next.equals("Y");
+
+            scanner.nextLine();
+
+            //TODO update ifStop, if need continue, update the feedback content and press 'Y'
+            if (iterIndex == ITER_NUM)
+                ifStop = true;
         }
 
 

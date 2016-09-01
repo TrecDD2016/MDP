@@ -16,6 +16,7 @@ import java.util.Map;
 public class Doc2Mysql {
     private static int INSERT_PER_BATCH = 100;
 
+//    id , content
     private static Map<String,String> docMap = new HashMap();
 
     private static String FILE_SUFFIX = "txt";
@@ -29,7 +30,7 @@ public class Doc2Mysql {
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
             if (qName.equals("DOCNO")) {
-                status = STATUS.number;
+                status = STATUS.id;
             }else if(qName.equals("DOCCONTENT")){
                 status = STATUS.document;
             }
@@ -46,7 +47,7 @@ public class Doc2Mysql {
         public void characters(char[] ch, int start, int length) throws SAXException {
 
             switch (status){
-                case number:
+                case id:
                     keyStore=new String(ch, start, length).trim();
                     docMap.put(keyStore,"");
                     break;
@@ -60,23 +61,23 @@ public class Doc2Mysql {
     };
 
 
-    private static void writeDocs(String docName,Map<String, String> m) {
+    private static void writeDocs(Map<String, String> m) {
         StringBuffer sb = new StringBuffer();
         int numInBatch = 1;		//当前行是在本批中的第几个
 
         for (Map.Entry<String, String> e : m.entrySet()) {
-            String word = e.getKey().replaceAll("\'", "''");
+            String id = e.getKey().replaceAll("\'", "''");
             String content = e.getValue().replaceAll("\'"," ");
             if (numInBatch == 1) {
-                sb.append("insert into docs(doc, id) values('");
-                sb.append(docName).append("','").append(word).append("')");
+                sb.append("insert into docs(doc_id, content) values('");
+                sb.append(id).append("','").append(content).append("')");
                 numInBatch++;
             }else if (numInBatch > INSERT_PER_BATCH) {
                 DBUtility.executeInsert(sb.toString());
                 sb.setLength(0);
                 numInBatch = 1;
             }else {
-                sb.append(",('").append(docName).append("','").append(word).append("')");
+                sb.append(",('").append(id).append("','").append(content).append("')");
                 numInBatch++;
             }
         }
@@ -88,44 +89,35 @@ public class Doc2Mysql {
 
     private static SAXParserFactory factory = SAXParserFactory.newInstance();
 
-    private static SAXParser parser;
-
 
     private static SAXParserImpl saxParserImpl;
 
     static {
         try {
-            parser = factory.newSAXParser();
             saxParserImpl = SAXParserImpl.newInstance(null);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
         } catch (SAXException e) {
             e.printStackTrace();
         }
     }
 
-    public static void startImport(String docDir){
-
+    public static void startImport(String[] docDirs){
+        DBUtility.executeSetting();
         DBUtility.executeTruncateDocs();
 
-        File cRoot = new File(docDir);
-        File[] files = cRoot.listFiles();
-        for (File f: files){
+        for (String docDir : docDirs) {
+            File cRoot = new File(docDir);
+            File[] files = cRoot.listFiles();
+            for (File f : files) {
 
-            String fileName = f.getName().substring(0, f.getName().lastIndexOf('.'));
+                String fileName = f.getName().substring(0, f.getName().lastIndexOf('.'));
 
-            if (!fileName.trim().equals("")) {
-
-                mapFile(f);
-
-                // execute batch each INSERT_PER_BATCH docs
-//            if (docMap.size() > INSERT_PER_BATCH) {
-                writeDocs(fileName.trim(), docMap);
-                docMap.clear();
-//            }
+                if (!fileName.trim().equals("")) {
+                    mapFile(f);
+                    writeDocs(docMap);
+                    docMap.clear();
+                }
             }
         }
-
     }
 
 
@@ -157,7 +149,7 @@ public class Doc2Mysql {
 
 
 enum STATUS {
-    number,
+    id,
     document,
     other
 }

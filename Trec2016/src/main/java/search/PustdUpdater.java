@@ -55,7 +55,6 @@ public class PustdUpdater {
                     pustdMap.put(t,pustdNew);
                 }
 
-                DBWriter.updatePustdByTerm(t, pustdMap);
             }else if(!DPre.contains(t) && qAdded.contains(t)){
                 double idfT = dbReader.getIdf(t);
 

@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class DBReader3 implements DBReadService{
 	
@@ -75,18 +76,6 @@ public class DBReader3 implements DBReadService{
 		return new ArrayList<String>(relatedDocs); 
 	}
 	
-//	public static void main(String[]args) {
-//		ArrayList<String> a = new ArrayList<String>();
-//		a.add("clueweb09-en0000-23-00194");
-//		a.add("clueweb09-en0000-43-16967");
-//		ArrayList<String> res = new db.DBReader3().getRelatedDocs(a);
-//		for (String s : res) {
-//			System.out.println(s);
-//		}
-//		System.out.println(new db.DBReader3().getIdf("contact"));
-//		System.out.println(new db.DBReader3().getPstd("contact", "clueweb09-en0000-43-16967"));
-//		System.out.println(new db.DBReader3().getPustd("contact", "clueweb09-en0000-43-16967"));
-//	}
 
 	/* (non-Javadoc)
 	 * @see db.DBReadService#getPaths(java.util.ArrayList)
@@ -118,23 +107,28 @@ public class DBReader3 implements DBReadService{
 	}
 
 
-	/* (non-Javadoc)
-	 * @see db.DBReadService#getPaths(java.util.ArrayList)
-	 */
-	public ArrayList<String> getDocNos(String doc) {
-		ArrayList<String> res = new ArrayList<String>();
-		StringBuffer sql = new StringBuffer("select id from docs where doc='"+doc+"'");
+	public Map<String,String> getDocs(Long startIndex, Long size){
+		Map<String, String> docMap = new HashMap<String, String>();
+		StringBuffer sql = new StringBuffer("select * from docs limit ?,").append(size.toString());
 		PreparedStatement ps = DBUtility.getPreparedStatement(sql.toString());
+		ResultSet rs = null;
 		try {
-			ResultSet rs = ps.executeQuery();
+			ps.setLong(1,startIndex);
+			rs = ps.executeQuery();
 			while(rs.next()) {
-				res.add(rs.getString(1));
+				docMap.put(rs.getString(2),rs.getString(3));
 			}
+			System.out.println("doc index: "+startIndex);
+			rs.close();
+			ps.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return res;
+
+		return docMap;
 	}
+
 
 	/* (non-Javadoc)
 	 * @see db.DBReadService#initialize(java.lang.String)

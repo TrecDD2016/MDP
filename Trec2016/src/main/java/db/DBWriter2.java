@@ -12,11 +12,7 @@ import util.Segmenter;
 public class DBWriter2 {
 	
 	private static int INSERT_PER_BATCH = 8000;
-	
-	private static final String C_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//语料库路径
-	
-	private static final String D_PATH = "/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML";	//文档库路径
-	
+
 	private static final String CORPUS_FILE_EXT = ".txt";	//语料库文件后缀名
 	
 	private static final String DOCS_FILE_EXT = ".txt";	//语料库文件后缀名
@@ -33,23 +29,27 @@ public class DBWriter2 {
 	
 	private static int docsCount = 0;	//全部文档总数
 	
-	public static void initializeDatabase(){
+	public static void initializeDatabase(String[] C_PATHS , String[] D_PATHS){
 		
 		DBUtility.executeTruncate2();
 		DBUtility.executeSetting();
+
+		for (String path: C_PATHS) {
+			//扫描语料库
+			File cRoot = new File(path);
+			scanCorpus(cRoot);
+			System.out.println("Corpus Initialized!");
+		}
+
+		for (String path: D_PATHS) {
+			//扫描文档集
+			File dRoot = new File(path);
+			scanDocs(dRoot);
+			System.out.println("Docs Initialized!");
+		}
 		
-		//扫描语料库
-		File cRoot = new File(C_PATH);
-		scanCorpus(cRoot);
-		System.out.println("Corpus Initialized!");
-		
-		//扫描文档集
-		File dRoot = new File(D_PATH);
-		scanDocs(dRoot);
-		System.out.println("Docs Initialized!");
-		
-		writePath(pathMap);
-		System.out.println("Paths Initialized!");
+//		writePath(pathMap);
+//		System.out.println("Paths Initialized!");
 		
 		HashMap<String, Double> idfMap = new HashMap<String, Double>();
 		for (Entry<String, Integer> e : numDocsContainsTerm.entrySet()) {
@@ -323,6 +323,11 @@ public class DBWriter2 {
 	}
 	
 	public static void main(String[]args) {
-		DBWriter2.initializeDatabase();
+
+		String[] C_PATHS = {
+				"/Volumes/HDD/link/adventure/项目/dd-trec/EbolaDataXML",
+				"/Volumes/HDD/link/adventure/项目/dd-trec/PolarDataXML"
+		};
+		DBWriter2.initializeDatabase(C_PATHS,C_PATHS);
 	}
 }

@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class ExtractQuery {
 
-    private static String serializedClassifier = "/Volumes/HDD/link/adventure/项目/dd-trec/stanford_ner_demo/stanford-ner-2015-12-09/classifiers/english.all.3class.distsim.crf.ser.gz";
+    private static String serializedClassifier = "/backup/dd_trec/MDP/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz";
 
     public static String extract(String feedbackPath) throws Exception {
 

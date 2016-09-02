@@ -96,7 +96,7 @@ public class Main {
 
             //TODO update ifStop, if need continue, update the feedback content and press 'Y'
             if (iterIndex == ITER_NUM)
-                ifStop = true;
+                ifStop = false;
         }
 
 

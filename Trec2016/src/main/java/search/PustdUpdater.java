@@ -41,14 +41,16 @@ public class PustdUpdater {
             HashMap<String, Double> pustdMap = new HashMap<String, Double>(1);
             ArrayList<String> docs = dbReader.getRelatedDocs(termList);
 
+            Map<String, Double> docOldPustdMap = dbReader.getPustds(t, docs);
+
             if (!DPre.contains(t) && qRemoved.contains(t)){
                 continue;
             }else if(DPre.contains(t) && qRemoved.contains(t) && qAdded.contains(t)){
 
-                for (String d: docs) {
-                    double pustdOld = dbReader.getPustd(t, d);
+                double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
 
-                    double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
+                for (String d: docs) {
+                    double pustdOld = docOldPustdMap.get(d);
 
                     double pustdNew = Math.exp(1-pustdLastBest)*pustdOld;
 
@@ -59,7 +61,7 @@ public class PustdUpdater {
                 double idfT = dbReader.getIdf(t);
 
                 for (String d: docs) {
-                    double pustdOld = dbReader.getPustd(t, d);
+                    double pustdOld = docOldPustdMap.get(d);
 
                     double pustdNew = Math.exp(1 + idfT) * pustdOld;
 
@@ -68,10 +70,10 @@ public class PustdUpdater {
 
             }else if(qTheme.contains(t)){
 
-                for (String d: docs) {
-                    double pustdOld = dbReader.getPustd(t, d);
+                double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
 
-                    double pustdLastBest = dbReader.getPustd(t, lastBestDoc);
+                for (String d: docs) {
+                    double pustdOld = docOldPustdMap.get(d);
 
                     double pustdNew = Math.exp(1+(1-pustdLastBest))*pustdOld;
 
